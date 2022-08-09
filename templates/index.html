@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href={% static "favicon.png" %} rel="icon" type="image/png">
+    <link href={% static 'favicon.png' %} rel="icon" type="image/png">
     <title>Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -197,7 +197,7 @@
                     <div class="space-y-5 flex-shrink-0 lg:w-7/12">
 
                         <!-- post 1-->
-                        {% for feeds in feed %}
+                        {% for post in posts %}
                         <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
     
                             <!-- post header-->
@@ -208,7 +208,7 @@
                                             <img src="{% static 'assets/images/avatars/avatar-6.jpg' %}" class="bg-gray-200 border border-white rounded-full w-8 h-8">
                                         </div>
                                     </a>
-                                    <span class="block capitalize font-semibold ">@{{feed.user}}</span>
+                                    <span class="block capitalize font-semibold ">@{{post.user}}</span>
                                 </div>
                               <div>
                                 <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
@@ -251,7 +251,7 @@
     
                             <div uk-lightbox>
                                 <a href="{% static 'access/images/post/img4.jpg' %}">  
-                                    <img src="{feed.image.url}" alt="">
+                                    <img src="{post.image.url}" alt="">
                                 </a>
                             </div>
                             

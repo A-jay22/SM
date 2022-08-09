@@ -11,9 +11,10 @@ def index(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
 
-    feed = Post.objects.all()
-    print(feed)
-    context = {'user_profile':user_profile, 'feed':feed }
+    post = Post.objects.all()
+    post = []
+    print(post)
+    context = {'user_profile':user_profile, 'post':post }
     return render(request, 'index.html', context)
 
 @login_required(login_url='signin')
