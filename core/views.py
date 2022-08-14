@@ -1,21 +1,33 @@
 import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth. models import User, auth
+from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from . models import Profile, Post
+from . models import Profile, Post, LikePost
 
 @login_required(login_url='signin')
 def index(request):
     user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user=user_object)
+    user_profile = Profile.objects.filter(user=user_object)
 
-    post = Post.objects.all()
-    post = []
-    print(post)
-    context = {'user_profile':user_profile, 'post':post }
+    posts = Post.objects.all()
+    #post = []
+    print(posts)
+    context = {'user_profile':user_profile, 'posts':posts }
     return render(request, 'index.html', context)
+
+@login_required(login_url='signin')
+def profile(request, pk):
+    username = request.user.username
+    user_object = User.objects.get(username)
+    user_profile = Profile.objects.get(user=user_object)
+    user_post = Post.objects.filter(user=pk)
+    user_post_length = len(user_post)
+    print(user_object)  
+    context = {'user_object':user_object,  
+    'user_post':user_post, 'user_post_length':user_post_length, 'user_profile':user_profile}
+    return render (request, 'profile.html', context)
 
 @login_required(login_url='signin')
 def upload(request):
@@ -30,6 +42,29 @@ def upload(request):
     else:
         return redirect('/')
     
+@login_required(login_url='signin')
+def likepost(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes+1
+        post.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes-1
+        post.save()
+        return redirect('/')
+
+
+    return render(request, 'likepost')
 
 @login_required(login_url='signin')
 def settings(request):
